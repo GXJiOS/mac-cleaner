@@ -1,0 +1,72 @@
+{
+  "name": "mac-cleaner-studio",
+  "version": "1.1.0",
+  "private": true,
+  "description": "A local-first macOS cleaner with a Swift safety core and Vite interface.",
+  "type": "module",
+  "main": "electron/main.cjs",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "npm run build:helper:debug && concurrently -k -s first \"vite --host 127.0.0.1\" \"wait-on http://127.0.0.1:5173 && electron .\"",
+    "dev:web": "vite --host 127.0.0.1",
+    "build:helper:debug": "swift build",
+    "build:helper": "swift build -c release",
+    "test": "vitest run",
+    "typecheck": "tsc -b",
+    "build:web": "tsc -b && vite build",
+    "check": "npm run test && npm run build:web",
+    "dist:mac": "npm run build:web && npm run build:helper && electron-builder --mac dir"
+  },
+  "dependencies": {
+    "lucide-react": "^0.468.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.1.0",
+    "concurrently": "^9.2.0",
+    "electron": "^39.2.0",
+    "electron-builder": "^26.0.12",
+    "typescript": "^5.9.0",
+    "vite": "^7.2.0",
+    "vitest": "^4.0.0",
+    "wait-on": "^9.0.0"
+  },
+  "build": {
+    "appId": "com.gcdm.maccleaner",
+    "productName": "MacCleaner",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": ".build/release/MacCleaner",
+        "to": "helper/MacCleaner"
+      },
+      {
+        "from": "Resources/Assets.car",
+        "to": "Assets.car"
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.utilities",
+      "icon": "Resources/AppIcon.icns",
+      "target": [
+        "dir"
+      ],
+      "extendInfo": {
+        "NSHumanReadableCopyright": "Local-first Mac cleanup utility"
+      }
+    }
+  }
+}

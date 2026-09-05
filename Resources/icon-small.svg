@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- MacCleaner App Icon — 方案 A 小尺寸简化版（仅用于 16px / 32px）
+       与主图差异：刷子放大 ~16%、刷毛减到 5 根并加粗、去掉两颗小 sparkle、
+       去掉外投影与白描边。同样是内容层，形状由 mask/ 决定 -->
+  <defs>
+    <linearGradient id="grad" x1="0" y1="0" x2=".35" y2="1">
+      <stop offset="0"   stop-color="#7B8CFF"/>
+      <stop offset=".5"  stop-color="#6366F1"/>
+      <stop offset="1"   stop-color="#A855F7"/>
+    </linearGradient>
+    <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0"   stop-color="#ffffff" stop-opacity=".26"/>
+      <stop offset=".5"  stop-color="#ffffff" stop-opacity=".03"/>
+      <stop offset="1"   stop-color="#000000" stop-opacity=".06"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="1024" height="1024" fill="url(#grad)"/>
+  <rect x="0" y="0" width="1024" height="1024" fill="url(#gloss)"/>
+
+  <g transform="rotate(-32 512 512)">
+    <rect x="262" y="384" width="500" height="172" rx="86" fill="#ffffff"/>
+    <g fill="#ffffff" fill-opacity=".8">
+      <rect x="308" y="552" width="52" height="132" rx="26"/>
+      <rect x="392" y="552" width="52" height="158" rx="26"/>
+      <rect x="476" y="552" width="52" height="134" rx="26"/>
+      <rect x="560" y="552" width="52" height="156" rx="26"/>
+      <rect x="644" y="552" width="52" height="130" rx="26"/>
+    </g>
+  </g>
+
+  <g transform="translate(744,306) scale(92)">
+    <path d="M0,-1 C0,-0.26 0.26,0 1,0 C0.26,0 0,0.26 0,1 C0,0.26 -0.26,0 -1,0 C-0.26,0 0,-0.26 0,-1 Z" fill="#ffffff"/>
+  </g>
+</svg>

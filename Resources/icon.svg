@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- MacCleaner 图标 — 方案 A「清洁刷」内容层
+       重要：本文件铺满整个 1024 画布，不画圆角、不画投影、不画描边。
+       最终形状由 mask/ 里的 squircle 蒙版决定，投影由 macOS 自己加。
+       原因：macOS 26 会比对图标的 alpha 轮廓，必须精确等于 824x824+100+100
+       的标准 squircle；任何溢出（投影/描边）都会被判定为旧式图标并套上灰背板。
+       换配色只需改 #grad 的三个 stop-color -->
+  <defs>
+    <linearGradient id="grad" x1="0" y1="0" x2=".35" y2="1">
+      <stop offset="0" stop-color="#7B8CFF"/><stop offset=".5" stop-color="#6366F1"/><stop offset="1" stop-color="#A855F7"/>
+    </linearGradient>
+    <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity=".30"/><stop offset=".42" stop-color="#fff" stop-opacity=".06"/>
+      <stop offset=".62" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".07"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="1024" height="1024" fill="url(#grad)"/>
+  <rect x="0" y="0" width="1024" height="1024" fill="url(#gloss)"/>
+  <g transform="rotate(-32 512 512)">
+    <rect x="286" y="392" width="452" height="152" rx="76" fill="#fff"/>
+    <g fill="#fff" fill-opacity=".72">
+      <rect x="322" y="540" width="34" height="126" rx="17"/><rect x="382" y="540" width="34" height="152" rx="17"/>
+      <rect x="442" y="540" width="34" height="130" rx="17"/><rect x="502" y="540" width="34" height="158" rx="17"/>
+      <rect x="562" y="540" width="34" height="128" rx="17"/><rect x="622" y="540" width="34" height="150" rx="17"/>
+      <rect x="682" y="540" width="34" height="122" rx="17"/>
+    </g>
+  </g>
+  <g transform="translate(722,318) scale(74)"><path d="M0,-1 C0,-0.26 0.26,0 1,0 C0.26,0 0,0.26 0,1 C0,0.26 -0.26,0 -1,0 C-0.26,0 0,-0.26 0,-1 Z" fill="#fff"/></g>
+  <g transform="translate(618,232) scale(38)"><path d="M0,-1 C0,-0.26 0.26,0 1,0 C0.26,0 0,0.26 0,1 C0,0.26 -0.26,0 -1,0 C-0.26,0 0,-0.26 0,-1 Z" fill="#fff" fill-opacity=".78"/></g>
+  <g transform="translate(796,436) scale(28)"><path d="M0,-1 C0,-0.26 0.26,0 1,0 C0.26,0 0,0.26 0,1 C0,0.26 -0.26,0 -1,0 C-0.26,0 0,-0.26 0,-1 Z" fill="#fff" fill-opacity=".6"/></g>
+</svg>
