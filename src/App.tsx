@@ -18,6 +18,8 @@ import type {
 
 type ItemGroups = Record<CategoryId, CleanItem[]>;
 type Toast = { kind: 'success' | 'warning' | 'error'; message: string };
+type CleanScope = 'all' | CategoryId;
+type CleanRequest = { scope: CleanScope; items: CleanItem[] };
 const CATEGORY_IDS = CATEGORIES.map((category) => category.id);
 
 const emptyGroups = (): ItemGroups => ({
@@ -38,7 +40,7 @@ export default function App() {
   const [pendingCategories, setPendingCategories] = useState<Set<CategoryId>>(new Set());
   const [hasScanned, setHasScanned] = useState(false);
   const [runtime, setRuntime] = useState<RuntimeInfo | null>(null);
-  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [cleanRequest, setCleanRequest] = useState<CleanRequest | null>(null);
   const [toast, setToast] = useState<Toast | null>(null);
 
   useEffect(() => {
@@ -98,10 +100,6 @@ export default function App() {
     () => selectedItems.reduce((sum, item) => sum + item.size, 0),
     [selectedItems],
   );
-  const cautionCount = useMemo(
-    () => selectedItems.filter((item) => item.safety === 'caution').length,
-    [selectedItems],
-  );
 
   const startScan = async () => {
     setToast(null);
@@ -156,13 +154,22 @@ export default function App() {
     });
   };
 
+  const requestClean = (scope: CleanScope) => {
+    if (phase !== 'idle') return;
+    const items = selectedItems.filter((item) => scope === 'all' || item.category === scope);
+    if (items.length === 0) return;
+    setCleanRequest({ scope, items });
+  };
+
   const cleanSelected = async () => {
-    setConfirmOpen(false);
+    if (phase !== 'idle' || !cleanRequest) return;
+    const ids = cleanRequest.items.map((item) => item.id);
+    setCleanRequest(null);
     setPhase('cleaning');
     setToast(null);
 
     try {
-      const result: CleanResult = await bridge.cleanSelected([...selectedIDs]);
+      const result: CleanResult = await bridge.cleanSelected(ids);
       const cleaned = new Set(result.cleanedIDs);
       setGroups((current) =>
         Object.fromEntries(
@@ -235,10 +242,10 @@ export default function App() {
             <button
               className="button button-primary"
               disabled={isBusy || selectedItems.length === 0}
-              onClick={() => setConfirmOpen(true)}
+              onClick={() => requestClean('all')}
             >
               {phase === 'cleaning' ? <LoaderCircle className="spin" size={17} /> : <Trash2 size={17} />}
-              清理 {selectedItems.length > 0 ? formatBytes(selectedSize) : ''}
+              清理全部分类 {selectedItems.length > 0 ? formatBytes(selectedSize) : ''}
             </button>
           </div>
         </header>
@@ -264,8 +271,10 @@ export default function App() {
               selectedIDs={selectedIDs}
               pending={pendingCategories.has(activeView)}
               hasScanned={hasScanned}
+              isBusy={isBusy}
               onToggle={setItemSelected}
               onSelectAll={(selected) => setCategorySelected(activeView, selected)}
+              onClean={() => requestClean(activeView)}
               onReveal={(id) => void bridge.revealItem(id)}
             />
           )}
@@ -295,13 +304,14 @@ export default function App() {
         </div>
       )}
 
-      {confirmOpen && (
+      {cleanRequest && (
         <ConfirmDialog
-          itemCount={selectedItems.length}
-          selectedSize={selectedSize}
-          cautionCount={cautionCount}
+          scopeLabel={cleanRequest.scope === 'all' ? '全部分类' : CATEGORY_MAP[cleanRequest.scope].title}
+          itemCount={cleanRequest.items.length}
+          selectedSize={cleanRequest.items.reduce((sum, item) => sum + item.size, 0)}
+          cautionCount={cleanRequest.items.filter((item) => item.safety === 'caution').length}
           cleaning={phase === 'cleaning'}
-          onCancel={() => setConfirmOpen(false)}
+          onCancel={() => setCleanRequest(null)}
           onConfirm={() => void cleanSelected()}
         />
       )}

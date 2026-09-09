@@ -2,6 +2,7 @@ import { AlertTriangle, Trash2, X } from 'lucide-react';
 import { formatBytes, formatCount } from '../lib/format';
 
 interface ConfirmDialogProps {
+  scopeLabel: string;
   itemCount: number;
   selectedSize: number;
   cautionCount: number;
@@ -11,6 +12,7 @@ interface ConfirmDialogProps {
 }
 
 export function ConfirmDialog({
+  scopeLabel,
   itemCount,
   selectedSize,
   cautionCount,
@@ -32,7 +34,7 @@ export function ConfirmDialog({
         </button>
         <div className="confirm-icon"><Trash2 size={28} /></div>
         <span className="eyebrow">FINAL REVIEW</span>
-        <h2 id="clean-dialog-title">移入废纸篓？</h2>
+        <h2 id="clean-dialog-title">清理{scopeLabel}的已选项目？</h2>
         <p>
           将移动 <strong>{formatCount(itemCount)} 个项目</strong>，预计释放{' '}
           <strong>{formatBytes(selectedSize)}</strong>。内容可以从废纸篓恢复。

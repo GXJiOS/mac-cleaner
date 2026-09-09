@@ -6,6 +6,7 @@ import {
   FolderOpen,
   Search,
   ShieldCheck,
+  Trash2,
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import type { CategoryMeta } from '../data/categories';
@@ -20,8 +21,10 @@ interface ResultPanelProps {
   selectedIDs: Set<string>;
   pending: boolean;
   hasScanned: boolean;
+  isBusy: boolean;
   onToggle(id: string, selected: boolean): void;
   onSelectAll(selected: boolean): void;
+  onClean(): void;
   onReveal(id: string): void;
 }
 
@@ -31,8 +34,10 @@ export function ResultPanel({
   selectedIDs,
   pending,
   hasScanned,
+  isBusy,
   onToggle,
   onSelectAll,
+  onClean,
   onReveal,
 }: ResultPanelProps) {
   const [query, setQuery] = useState('');
@@ -45,7 +50,9 @@ export function ResultPanel({
   }, [items, query]);
   const visible = filtered.slice(0, DISPLAY_LIMIT);
   const totalSize = items.reduce((sum, item) => sum + item.size, 0);
-  const selectedCount = items.filter((item) => selectedIDs.has(item.id)).length;
+  const selectedItems = items.filter((item) => selectedIDs.has(item.id));
+  const selectedCount = selectedItems.length;
+  const selectedSize = selectedItems.reduce((sum, item) => sum + item.size, 0);
   const allSelected = items.length > 0 && selectedCount === items.length;
 
   return (
@@ -59,6 +66,15 @@ export function ResultPanel({
           <h1>{category.title}</h1>
           <p>{category.subtitle}</p>
         </div>
+        <button
+          type="button"
+          className="button button-primary category-clean-button"
+          disabled={isBusy || selectedCount === 0}
+          onClick={onClean}
+        >
+          <Trash2 size={17} />
+          清理本类已选 {selectedCount > 0 ? formatBytes(selectedSize) : ''}
+        </button>
         <div className="result-total">
           <span>{pending ? '正在扫描' : '发现空间'}</span>
           <strong>{pending ? '…' : formatBytes(totalSize)}</strong>
@@ -82,7 +98,7 @@ export function ResultPanel({
             type="button"
             className={`select-all${allSelected ? ' checked' : ''}`}
             onClick={() => onSelectAll(!allSelected)}
-            disabled={items.length === 0}
+            disabled={isBusy || items.length === 0}
           >
             <span className="fake-checkbox">{allSelected && <Check size={13} />}</span>
             {allSelected ? '取消全选' : '全选本类'}
@@ -133,6 +149,7 @@ export function ResultPanel({
                     type="button"
                     className={`row-checkbox${selected ? ' checked' : ''}`}
                     aria-label={`${selected ? '取消选择' : '选择'} ${item.name}`}
+                    disabled={isBusy}
                     onClick={() => onToggle(item.id, !selected)}
                   >
                     {selected && <Check size={13} />}

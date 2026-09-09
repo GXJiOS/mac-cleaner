@@ -797,7 +797,7 @@ h1 { margin: 0; font: 700 22px/1.1 Manrope, sans-serif; letter-spacing: -.03em; 
 
 .result-hero {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto auto;
   align-items: center;
   gap: 20px;
   padding: 22px 24px;
@@ -812,6 +812,7 @@ h1 { margin: 0; font: 700 22px/1.1 Manrope, sans-serif; letter-spacing: -.03em; 
 .result-total { min-width: 125px; text-align: right; }
 .result-total span, .result-total small { display: block; color: #756d85; font-size: 8px; }
 .result-total strong { display: block; margin: 3px 0; color: var(--category-accent); font: 700 18px/1.2 'Avenir Next', sans-serif; }
+.category-clean-button { min-height: 42px; }
 
 .caution-banner {
   display: flex;
